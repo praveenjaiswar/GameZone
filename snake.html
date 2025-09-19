@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: "Courier New", monospace;
+            background: radial-gradient(circle at center, #6a11cb, #2575fc);
+            color: #fff;
+        }
+
+        header {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1f1f1f;
+            padding: 1rem 2rem;
+            z-index: 1000;
+            box-sizing: border-box;
+            flex-wrap: wrap;
+        }
+
+        .logo,
+        .user-login {
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+            flex: 0 1 auto;
+        }
+
+        h1 {
+            margin: 5px;
+        }
+
+        #score,
+        #level {
+            font-size: 20px;
+            margin: 5px;
+        }
+
+        canvas {
+            border: 2px solid #fff;
+            background: #000;
+        }
+
+        #startBtn,
+        #backBtn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: limegreen;
+            color: #fff;
+        }
+
+        #startBtn:active {
+            background: green;
+        }
+
+        .controls {
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: 60px 60px 60px;
+            grid-template-rows: 60px 60px;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            background: #333;
+            color: #fff;
+            font-size: 20px;
+            border: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .btn:active {
+            background: #555;
+        }
+
+        #up {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        #left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        #down {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        #right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="game-navbar">
+        <div class="logo" onclick="refreshPage()">🎮 GameZone</div>
+        <div class="user-login">👤 Login</div>
+    </header>
+    <h1>Snake Game</h1>
+    <div id="score">Score: 0</div>
+    <div id="level">Level: 1</div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <button id="startBtn">Start Game</button>
+    <button id="backBtn">↩️ Back</button>
+    <div class="controls">
+        <button class="btn" id="up">⬆</button>
+        <button class="btn" id="left">⬅</button>
+        <button class="btn" id="down">⬇</button>
+        <button class="btn" id="right">➡</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreEl = document.getElementById("score");
+        const levelEl = document.getElementById("level");
+        const startBtn = document.getElementById("startBtn");
+
+        const box = 20;
+        let snake, direction, food, score, level, speed, game;
+
+        function initGame() {
+            snake = [{ x: 9 * box, y: 10 * box }];
+            direction = null;
+            score = 0;
+            level = 1;
+            speed = 150;
+            food = {
+                x: Math.floor(Math.random() * 19) * box,
+                y: Math.floor(Math.random() * 19) * box,
+            };
+            scoreEl.textContent = "Score: " + score;
+            levelEl.textContent = "Level: " + level;
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+            if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+            if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+            if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+        });
+
+        document.getElementById("up").onclick = () => { if (direction !== "DOWN") direction = "UP"; };
+        document.getElementById("left").onclick = () => { if (direction !== "RIGHT") direction = "LEFT"; };
+        document.getElementById("down").onclick = () => { if (direction !== "UP") direction = "DOWN"; };
+        document.getElementById("right").onclick = () => { if (direction !== "LEFT") direction = "RIGHT"; };
+
+        function draw() {
+            ctx.fillStyle = "#000";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = i === 0 ? "lime" : "green";
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                ctx.strokeStyle = "#111";
+                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+            }
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x, food.y, box, box);
+
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if (direction === "LEFT") snakeX -= box;
+            if (direction === "UP") snakeY -= box;
+            if (direction === "RIGHT") snakeX += box;
+            if (direction === "DOWN") snakeY += box;
+
+            if (snakeX === food.x && snakeY === food.y) {
+                score++;
+                scoreEl.textContent = "Score: " + score;
+
+                if (score % 2 === 0 && speed > 50) {
+                    level++;
+                    speed -= 10;
+                    levelEl.textContent = "Level: " + level;
+                    clearInterval(game);
+                    game = setInterval(draw, speed);
+                }
+
+                food = {
+                    x: Math.floor(Math.random() * 19) * box,
+                    y: Math.floor(Math.random() * 19) * box,
+                };
+            } else {
+                snake.pop();
+            }
+
+            let newHead = { x: snakeX, y: snakeY };
+
+            if (
+                snakeX < 0 || snakeY < 0 ||
+                snakeX >= canvas.width || snakeY >= canvas.height ||
+                collision(newHead, snake)
+            ) {
+                clearInterval(game);
+                gameOverScreen();
+                return;
+            }
+
+            snake.unshift(newHead);
+        }
+
+        function collision(head, array) {
+            return array.some(segment => head.x === segment.x && head.y === segment.y);
+        }
+
+        function gameOverScreen() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "red";
+            ctx.font = "40px Courier New";
+            ctx.textAlign = "center";
+            ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 20);
+
+            ctx.fillStyle = "white";
+            ctx.font = "20px Courier New";
+            ctx.fillText("Final Score: " + score, canvas.width / 2, canvas.height / 2 + 20);
+        }
+
+        startBtn.onclick = () => {
+            initGame();
+            clearInterval(game);
+            game = setInterval(draw, speed);
+        };
+
+        initGame();
+
+        document.getElementById('backBtn').addEventListener('click', () => {
+            window.location.href = 'minigame.html'
+        });
+
+        function refreshPage() {
+            location.reload()
+        }
+    </script>
+</body>
+
+</html>
