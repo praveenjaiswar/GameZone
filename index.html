@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Gaming Portal</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #0e0e0e;
+            color: #eaeaea;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #181818;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ff0057;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: #eaeaea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ff0057;
+        }
+
+        .user-login {
+            background-color: #ff0057;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .user-login:hover {
+            background-color: #e6004c;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #ff0057, #2b2bff);
+            color: #fff;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-button {
+            padding: 0.75rem 1.5rem;
+            background-color: #fff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #ddd;
+        }
+
+        .featured-games {
+            padding: 3rem 2rem;
+        }
+
+        .featured-games h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .game-card {
+            background-color: #1f1f1f;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 0, 87, 0.4);
+            border: 1px solid #ff0057;
+        }
+
+
+        .game-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .game-card img:hover {
+            transform: scale(1.03);
+            transition: transform 0.3s ease;
+        }
+
+
+
+        .game-card h3 {
+            margin: 1rem 0 0.5rem;
+        }
+
+        .game-card button {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #ff0057;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .game-card button:hover {
+            background-color: #e6004c;
+        }
+
+        footer {
+            background-color: #181818;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        .social-icons a {
+            margin: 0 0.5rem;
+            font-size: 1.5rem;
+            color: #eaeaea;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #ff0057;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo" onclick="refreshPage()">🎮 GameZone</div>
+        <!-- <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Games</a></li>
+        <li><a href="#">Leaderboard</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav> -->
+        <div class="user-login">👤 Login</div>
+    </header>
+
+    <section class="hero">
+        <h1>Welcome to GameZone</h1>
+        <p>“Bored? Not anymore — dive into instant mini-game fun!”</p>
+        <a href="#" class="cta-button">Play Now</a>
+    </section>
+
+    <section class="featured-games">
+        <h2>Featured Games</h2>
+        <div class="game-grid">
+            <div class="game-card">
+                <img src="https://cdn.urbandigital.id/wp-content/uploads/2024/03/Tic-Tac-Toe-Google.png" alt="Game 1" />
+                <h3>Tic Tac Toe</h3>
+                <p>"Classic Xs and Os, test your strategy in a quick showdown!"</p>
+                <button class="play" onclick="location.href='tic-tac-toe.html'">Play</button>
+            </div>
+            <div class="game-card">
+                <img src="https://play-lh.googleusercontent.com/S9ZmNx5LYCj7h2IJZb0QqkXAGki6JRaMQ25ycKfrngDkNBA6jk7rM87YcAH1prV_OA"
+                    alt="Game 2" />
+                <h3>Snake</h3>
+                <p>"Guide the snake, eat the food, and don’t bite yourself!"</p>
+                <button class="play" onclick="location.href='snake.html'">Play</button>
+            </div>
+            <div class="game-card">
+                <img src="https://img.freepik.com/free-vector/hand-drawn-memory-game-cards_23-2150096752.jpg"
+                    alt="Game 3" />
+                <h3>Memory Card</h3>
+                <p>"Flip, match, and train your brain with fun card pairs."</p>
+                <button class="play" onclick="location.href='memorycard.html'">Play</button>
+            </div>
+            <div class="game-card">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/000/690/792/small_2x/rock-paper-scissors-hand-icons.jpg"
+                    alt="Game 4" />
+                <h3>Rock Paper Scissors</h3>
+                <p>"A simple yet timeless battle of wits and luck."</p>
+                <button class="play" onclick="location.href='rock-paper-scissors.html'">Play</button>
+            </div>
+            <div class="game-card">
+                <img src="https://img.itch.zone/aW1nLzY3NTE2MDEucG5n/original/RozA8q.png" alt="Game 4" />
+                <h3>Bouncing ball</h3>
+                <p>“Keep the ball in play and test your reflexes!”</p>
+                <button class="play" onclick="location.href='bounce.html'">Play</button>
+            </div>
+            <!-- Add more game cards as needed -->
+        </div>
+    </section>
+
+    <!-- <section class="leaderboard">
+    <h2>Top Players</h2>
+    <table>
+      <tr><th>Player</th><th>Score</th><th>Game</th></tr>
+      <tr><td>GamerX</td><td>9800</td><td>Pixel Racer</td></tr>
+      <tr><td>Nova</td><td>8700</td><td>Alien Blaster</td></tr>
+    </table>
+  </section> -->
+
+    <footer>
+        <p>&copy; 2025 GameZone. All rights reserved.</p>
+        <div class="social-icons">
+            <a href="#">🐦</a>
+            <a href="#">📘</a>
+            <a href="#">📸</a>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Reload page when clicked on logo
+        function refreshPage() {
+            location.reload()
+        }
+    </script>
+</body>
+
+</html>
